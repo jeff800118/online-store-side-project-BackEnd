@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>用戶註冊頁面</h1>
+
+    帳號 : <input type="text" id="ac_name">
+    <span id="ac_nameMsg"></span><br>
+    密碼 : <input type="password" id="upwd" required> 
+    <span id="upwdMsg"></span><br>
+    確認密碼 : <input type="password" id="reupwd" required>
+    <span id="reupwdMsg"></span><br>
+
+    <button id="next" >送出</button><br>
+    <div style="display: block;">
+        姓名 : <input type="text" id="uname" required> <br>
+        性別 : 
+        <div>
+            <input type="radio" value="0" name="gender" id="gender">
+            <label for="woman">0(女)</label>
+            <input type="radio" value="1" name="gender"> 
+            <label for="man">1(男)</label>
+        </div>
+        信箱 : <input type="text" id="email" required>
+        <span id="emailMsg"></span><br>
+        電話 : <input type="text" id="phone" required>
+        <span id="phoneMsg"></span><br>
+        住址 : <input type="text" id="address"> <br>
+        <button id="btn">註冊</button>
+    </div>
+
+
+    <script src= "https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+    <script>
+
+
+        btn.onclick = function () {
+            if(ac_nameBool && upwdBool && reupwdBool && emailBool && phoneBool){
+                // let regExp = /^[A-Z][a-z0-9]{4,8}/
+            let $ac_name = ac_name.value
+            let $ac_password = md5(upwd.value)
+            // console.log($ac_password.match(regExp))
+            let $uname = uname.value
+            let $gender = document.getElementById('gender')
+            let $email = email.value
+            let $phone = phone.value
+            let $address = address.value 
+            
+
+            // console.log($ac_name,$ac_password,$uname,$gender,$email,$phone,$address)
+
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange =  () => {
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    if(xhr.responseText == 1){
+                        alert('註冊成功')
+                    }else if(xhr.responseText == 0){
+                        alert('註冊失敗')
+                    }
+                }
+            };
+
+            
+            xhr.open('post','/user/reg');
+            xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+            let formData = `account_name=${$ac_name}&account_password=${$ac_password}&user_name=${$uname}&user_sex=${$gender.checked ? 0 : 1}&user_mail=${$email}&user_phone=${$phone}&user_address=${$address}&account_permission=1`;
+            // console.log(formData)
+            xhr.send(formData);
+            }
+               
+        }
+
+
+        // 設定布爾值
+        let ac_nameBool = false; 
+        let upwdBool = false; 
+        let reupwdBool= false; 
+        let emailBool = false; 
+        let phoneBool = false;
+
+
+
+        // 帳號部分
+        ac_name.onfocus = function () {
+        ac_nameMsg.innerHTML = '請輸入4到9位用戶名,，並且字首須為英文並大寫(Ex.D12345)';
+        }
+
+        ac_name.onblur = function(){
+            let  $ac_name = ac_name.value;
+            let  regExp = /^[A-Z][A-Za-z0-9]{3,8}/
+                if($ac_name.length == 0){
+                    ac_nameMsg.innerHTML ='用戶名不可為空';
+                    ac_nameBool = false
+                }else if($ac_name.length >=4 && $ac_name.length <= 9 && $ac_name == $ac_name.match(regExp) ){
+                    ac_nameBool = true
+                    ac_nameMsg.innerHTML = '格式正確'
+                    let xhr = new XMLHttpRequest();
+
+                    xhr.onreadystatechange = () => {
+                        if(xhr.readyState ==4 && xhr.status == 200){
+                            if(xhr.responseText == 1){
+                                ac_nameMsg.innerHTML ='用戶名已被註冊';
+                                ac_nameBool = false
+                            }else if (xhr.responseText == 0){
+                                ac_nameMsg.innerHTML = '√用戶名可註冊';
+                                ac_nameBool = true
+                            }
+                        }
+                    }
+
+                    xhr.open('get',`/user/queryUser?account_name=${$ac_name}`);
+                
+                    xhr.send();
+
+                } else {
+                    ac_nameMsg.innerHTML='格式不正確';
+                }
+            }
+
+
+        // 密碼部分
+        upwd.onfocus = function(){
+            upwdMsg.innerHTML = '請輸入6到10位密碼';
+        }
+
+        upwd.onblur = function(){
+            var $upwd = upwd.value;
+
+            if ($upwd.length == 0){
+                upwdMsg.innerHTML ='內容不能為空';
+                upwdBool = false;
+            } else if($upwd.length >=6 && $upwd.length <= 10){
+                upwdMsg.innerHTML ='格式正確';
+                upwdBool = true;
+            } else {
+                upwdMsg.innerHTML = '格式不正確，請重新輸入';
+                upwdBool = false;
+            }
+        }
+
+
+    
+
+        // 確認密碼部分
+        reupwd.onfocus = function(){
+            reupwdMsg.innerHTML = '需和密碼一致';
+        }
+
+        reupwd.onblur = function(){
+            var $reupwd = reupwd.value;
+            var $upwd = upwd.value;
+
+            if ($reupwd.length == 0){
+                reupwdMsg.innerHTML ='請再次輸入密碼';
+                reupwdBool = false;
+            } else if($reupwd == $upwd && $reupwd.length >= 6 && $reupwd.length <=10){
+                reupwdMsg.innerHTML ='格式正確';
+                reupwdBool = true;
+            } else {
+                reupwdMsg.innerHTML = '格式不正確，請重新輸入';
+                reupwdBool = false;
+            }
+        }
+
+        // 信箱部分
+        email.onfocus = function(){
+            emailMsg.innerHTML = '請輸入10到50位郵箱';
+        }
+
+        email.onblur = function(){
+            var $email = email.value;
+
+            if ($email.length == 0){
+                emailMsg.innerHTML ='內容不能為空';
+                emailBool = false;
+            } else if($email.length >=10 && $email.length <= 50){
+                emailMsg.innerHTML ='格式正確';
+                emailBool = true;
+            } else {
+                emailMsg.innerHTML = '格式不正確，請重新輸入';
+                emailBool = false;
+            }
+        }
+
+
+        // 電話部分
+        phone.onfocus = function(){
+            phoneMsg.innerHTML = '請輸入電話號碼';
+        }
+
+        phone.onblur = function(){
+            var $phone = phone.value;
+
+            if ($phone.length == 0){
+                phoneMsg.innerHTML ='內容不能為空';
+                phoneBool = false;
+            } else if($phone.length == 10){
+                phoneMsg.innerHTML ='格式正確';
+                phoneBool = true;
+            } else {
+                phoneMsg.innerHTML = '格式不正確，請重新輸入';
+                phoneBool = false;
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>用戶頁面查詢</h1>
+    <div style="display: flex;">
+        <div id="content" ></div><div style="margin-right: 20px;">你好</div>
+        <button id="btn2" style="border-radius:20%">退出</button>
+    </div><br>
+
+    <button id="btn">個人詳情</button>
+    <div id="content2"></div>
+    
+
+    <script>
+
+document.getElementById('content').innerText = sessionStorage.getItem('name')
+        btn.onclick = function () {
+            let xhr = new XMLHttpRequest();
+            
+            xhr.onreadystatechange = function () {
+                let result = JSON.parse(xhr.responseText)
+                console.log(result)
+                let str = `<table border="1" bordercolor="blue" width="1000" length="150">
+                                <tr>
+                                    <td>編號</td>
+                                    <td>用戶名稱</td>
+                                    <td>用戶性別</td>
+                                    <td>用戶電話</td>
+                                    <td>用戶地址</td>
+                                    <td>用戶權限</td>
+                                </tr>`
+                                    // <td>${result[0].account_num}</td>
+                                    // <td>${result[0].account_name}</td>
+                                    // <td>${result[0].account_password}</td>
+                                    // <td>${result[0].account_permission}</td>
+                                    // <td>${result[0].user_number}</td>
+                                    // <td>${result[0].user_name}</td>
+                                    // <td>${result[0].user_sex}</td>
+                                    // <td>${result[0].user_mail}</td>
+                                    // <td>${result[0].user_phone}</td>
+                                    // <td>${result[0].user_address}</td>
+                                    
+                // for(let key in result[0] && result[1]){
+                //     if(result[0][key].user_sex == 0){
+                //         result[0][key].user_sex = '女'
+                //     }else if(result[0][key].user_sex == 1){
+                //         result[0][key].user_sex = '男'
+                //     }
+                //     str +=`
+                //         <td>${result[0][key]}</td>
+                //     `
+                // }      
+                for(let i = 0 ; i < result.length ; i++){
+                    console.log(result[i].account_name) 
+                    // console.log(sessionStorage.getItem('name'))
+                    if(sessionStorage.getItem('name') == result[i].account_name){
+                        str +=` <tr><td>${result[i].account_num}</td>
+                            <td>${result[i].user_name}</td>
+                            <td>${result[i].user_sex }</td>
+                            <td>${result[i].user_phone}</td>
+                            <td>${result[i].user_address}</td>
+                            <td>${result[i].permission_name}</td>
+                            </tr>`
+                    }  
+                }
+                str+=`</table>`
+                content2.innerHTML = str 
+            }
+
+            xhr.open('get','/user/list');
+
+            xhr.send();
+        }
+
+        btn2.onclick = function(){
+            sessionStorage.clear()
+            location.replace('login.html')
+        }
+
+    </script>
+    
+</body>
+</html>
