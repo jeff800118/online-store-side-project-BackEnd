@@ -190,14 +190,15 @@ router.get('/goods',(req,res,next)=>{
 
 // ---尋找商品類別
 
-router.get('./goods/:goods_pid',(req,res,next)=>{
+router.get('/category/:goods_pid',(req,res,next)=>{
     let obj = req.query
-    let sql = 'SELECT * FROM goods WHERE goods_pid = ?'
+    let sql = 'SELECT * FROM goods WHERE goods_pid = ? '
     pool.query(sql,(obj.goods_pid),(err,result)=>{
         if(err){
             next(err)
             return;
         }
+        // result.lenght > 0 ? res.send('1') : res.send('0')
         res.send(result)
     })
 })
