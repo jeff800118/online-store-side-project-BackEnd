@@ -160,19 +160,47 @@ router.get('/delete/:account_num',(req,res,next)=>{
     let obj = req.params
     let sql = 'DELETE account,user1 FROM account JOIN user1 ON account.account_num = user1.user_num WHERE account_num = ? '
     pool.query(sql,[obj.account_num],(err,result)=>{
-        console.log('outside',result)
+        // console.log('outside',result)
         if(err){
             next(err);
             return;
         }
         if(result.affectedRows > 0){
             res.send('1')
-            console.log('inner',result)
+            // console.log('inner',result)
         }else{
             res.send('0')
         }
     })
 });
+
+// 產品資訊
+// ---商品列表
+router.get('/goods',(req,res,next)=>{
+    // let obj = req.query
+    let sql = 'SELECT * FROM goods'
+    pool.query(sql,(err,result)=>{
+        if (err){
+            next(err);
+            return;
+        }
+        res.send(result)
+    })
+})
+
+// ---尋找商品類別
+
+router.get('./goods/:goods_pid',(req,res,next)=>{
+    let obj = req.query
+    let sql = 'SELECT * FROM goods WHERE goods_pid = ?'
+    pool.query(sql,(obj.goods_pid),(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        res.send(result)
+    })
+})
 
 
 // 导出路由器对象

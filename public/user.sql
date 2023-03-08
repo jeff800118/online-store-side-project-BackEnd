@@ -1,9 +1,10 @@
--- account
+--login、Register
+-- TABLE account
 CREATE TABLE `account` (
     `account_num` Int KEY AUTO_INCREMENT,
     `account_name` VARCHAR(255) NOT NULL,
     `account_password` VARCHAR(255) NOT NULL,
-    `account_permission` VARCHAR(255) not null
+    `account_permission` VARCHAR(255) NOT NULL
 )CHARSET UTF8;
 
 INSERT INTO `account` (account_name,account_password,account_permission)
@@ -12,13 +13,13 @@ VALUES
 ('Ac02','a567890',0);
 
 
--- user
+-- TABLE user
 CREATE TABLE `user1` ( 
     `user_num` Int KEY AUTO_INCREMENT,
     `user_name` VARCHAR(255) NOT NULL,
     `user_sex` VARCHAR(255) NOT NULL,
-    `user_mail` VARCHAR(255) not null,
-    `user_phone` VARCHAR(255) not null,
+    `user_mail` VARCHAR(255) NOT NULL,
+    `user_phone` VARCHAR(255) NOT NULL,
     `user_address` VARCHAR(255)
 )CHARSET UTF8;
 
@@ -28,7 +29,7 @@ VALUES
 ('卡了米',1,'bbb@gmail.com',0987487987,"");
 
 
--- permission
+-- TABLE permission
 CREATE TABLE `permission` ( 
     `permission_num` VARCHAR(20) NOT NULL,
     `permission_name` VARCHAR(255) NOT NULL
@@ -40,7 +41,7 @@ VALUES
 (1,'一級會員');
 
 
--- sex
+-- TABLE sex
 CREATE TABLE `sex` ( 
     `sex_num` VARCHAR(20) NOT NULL,
     `sex_name` VARCHAR(255) NOT NULL
@@ -51,7 +52,9 @@ VALUES
 (0,'女'),
 (1,'男');
 
--- 內連接
+
+
+-- INNER JOIN
 SELECT user1.*,A.account_num FROM user1
 INNER JOIN account AS A
 ON user1.user_num = A.account_num;
