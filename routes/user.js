@@ -204,5 +204,17 @@ router.get('/category/:goods_pid',(req,res,next)=>{
 })
 
 
+router.get('/discountpercent',(req,res,next)=>{
+    let sql = 'SELECT * FROM discountpercent'
+    pool.query(sql,(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        res.send(result)
+    })
+})
+
+
 // 导出路由器对象
 module.exports = router;
