@@ -177,7 +177,6 @@ router.get('/delete/:account_num',(req,res,next)=>{
 // 產品資訊
 // ---商品列表
 router.get('/goods',(req,res,next)=>{
-    // let obj = req.query
     let sql = 'SELECT * FROM goods'
     pool.query(sql,(err,result)=>{
         if (err){
@@ -193,7 +192,7 @@ router.get('/goods',(req,res,next)=>{
 router.get('/category/:goods_pid',(req,res,next)=>{
     let obj = req.query
     let sql = 'SELECT * FROM goods WHERE goods_pid = ? '
-    pool.query(sql,(obj.goods_pid),(err,result)=>{
+    pool.query(sql,(obj,obj.goods_pid),(err,result)=>{
         if(err){
             next(err)
             return;
