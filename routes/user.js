@@ -178,7 +178,7 @@ router.get('/delete/:account_num',(req,res,next)=>{
 // ---商品列表
 router.get('/goods',(req,res,next)=>{
     let obj = req.query
-    let sql = 'SELECT * FROM goods WHERE goods_pid = ?'
+    let sql = 'SELECT * FROM goods'
     pool.query(sql,[obj.goods_pid],(err,result)=>{
         if (err){
             next(err);
@@ -190,10 +190,10 @@ router.get('/goods',(req,res,next)=>{
 
 // ---尋找商品類別
 
-router.get('/category/:goods_pid',(req,res,next)=>{
+router.get('/category',(req,res,next)=>{
     let obj = req.query
     let sql = 'SELECT * FROM goods WHERE goods_pid = ? '
-    pool.query(sql,(obj,obj.goods_pid),(err,result)=>{
+    pool.query(sql,[obj.goods_pid],(err,result)=>{
         if(err){
             next(err)
             return;
@@ -207,6 +207,18 @@ router.get('/category/:goods_pid',(req,res,next)=>{
 router.get('/discountpercent',(req,res,next)=>{
     let sql = 'SELECT * FROM discountpercent'
     pool.query(sql,(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        res.send(result)
+    })
+})
+
+router.get('/addtocart/:goods_num',(req,res,next)=>{
+    let obj = req.params
+    let sql = 'SELECT * FROM goods WHERE goods_num = ?'
+    pool.query(sql,[obj.goods_num],(err,result)=>{
         if(err){
             next(err)
             return;
