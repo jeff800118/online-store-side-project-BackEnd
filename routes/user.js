@@ -215,6 +215,7 @@ router.get('/discountpercent',(req,res,next)=>{
     })
 })
 
+//待刪除
 router.get('/addtocart/:goods_num',(req,res,next)=>{
     let obj = req.params
     let sql = 'SELECT * FROM goods WHERE goods_num = ?'
@@ -226,6 +227,21 @@ router.get('/addtocart/:goods_num',(req,res,next)=>{
         res.send(result)
     })
 })
+
+
+//帳號內的購物車
+router.post('/addtocart',(req,res,next)=>{
+    let obj = req.body
+    let sql = 'INSERT INTO cart JOIN account ON cart.cart_num = account.account_num'
+    pool.query(sql,[obj.goods_num],(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        res.send(result)
+    })
+})
+
 
 
 
