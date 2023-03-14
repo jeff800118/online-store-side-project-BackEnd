@@ -204,7 +204,7 @@ router.get('/category',(req,res,next)=>{
 })
 
 
-router.get('/discountpercent',(req,res,next)=>{
+router.get('/discountPercent',(req,res,next)=>{
     let sql = 'SELECT * FROM discountpercent'
     pool.query(sql,(err,result)=>{
         if(err){
@@ -216,7 +216,7 @@ router.get('/discountpercent',(req,res,next)=>{
 })
 
 //待刪除
-router.get('/addtocart/:goods_num',(req,res,next)=>{
+router.get('/addToCart/:goods_num',(req,res,next)=>{
     let obj = req.params
     let sql = 'SELECT * FROM goods WHERE goods_num = ?'
     pool.query(sql,[obj.goods_num],(err,result)=>{
@@ -229,11 +229,12 @@ router.get('/addtocart/:goods_num',(req,res,next)=>{
 })
 
 
-//帳號內的購物車
-router.post('/addtocart',(req,res,next)=>{
+//添加進用戶的的購物車
+router.post('/userCart',(req,res,next)=>{
     let obj = req.body
-    let sql = 'INSERT INTO cart JOIN account ON cart.cart_num = account.account_num'
-    pool.query(sql,[obj.goods_num],(err,result)=>{
+    console.log(obj)
+    let sql = 'INSERT INTO cart SET?'
+    pool.query(sql,[obj],(err,result)=>{
         if(err){
             next(err)
             return;
@@ -242,6 +243,20 @@ router.post('/addtocart',(req,res,next)=>{
     })
 })
 
+
+//查詢用戶的的購物車
+router.get('/queryUserCart',(req,res,next)=>{
+    let obj = req.query
+    console.log(obj)
+    let sql = 'SELECT * FROM cart WHERE goods_uname = ?'
+    pool.query(sql,[obj.goods_uname],(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        res.send(result)
+    })
+})
 
 
 
