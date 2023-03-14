@@ -246,10 +246,10 @@ router.post('/userCart',(req,res,next)=>{
 
 //查詢用戶的的購物車
 router.get('/queryUserCart',(req,res,next)=>{
-    let obj = req.query
-    console.log(obj)
-    let sql = 'SELECT * FROM cart WHERE goods_uname = ?'
-    pool.query(sql,[obj.goods_uname],(err,result)=>{
+    // let obj = req.query
+    // console.log(obj)
+    let sql = 'SELECT * FROM cart  ?'
+    pool.query(sql,(err,result)=>{
         if(err){
             next(err)
             return;
