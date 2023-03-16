@@ -248,13 +248,27 @@ router.post('/userCart',(req,res,next)=>{
 router.get('/queryUserCart',(req,res,next)=>{
     // let obj = req.query
     // console.log(obj)
-    let sql = 'SELECT * FROM cart  ?'
+    let sql = 'SELECT * FROM cart '
     pool.query(sql,(err,result)=>{
         if(err){
             next(err)
             return;
         }
         res.send(result)
+    })
+})
+
+// 商品數量的增減
+router.post('/updateCart',(req,res,next)=>{
+    let obj = req.body
+    console.log(obj)
+    let sql = 'UPDATE cart JOIN goods ON cart_goods_pid = goods_num SET ? '
+    pool.query(sql,(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        result.affectedRows > 0 ? res.send("1") : res.send("0")
     })
 })
 
