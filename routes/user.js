@@ -260,7 +260,7 @@ router.post('/queryUserCart',(req,res,next)=>{
 
 // 商品數量的增減
 router.post('/updateCart',(req,res,next)=>{
-    let obj = req.body
+    let obj = JSON.parse(JSON.stringify(req.body))
     console.log(obj)
     let sql = 'UPDATE cart SET ? WHERE cart_num = ?'
     pool.query(sql,[obj,obj.cart_num],(err,result)=>{
@@ -268,10 +268,26 @@ router.post('/updateCart',(req,res,next)=>{
             next(err)
             return;
         }
-        // result.affectedRows > 0 ? res.send("1") : res.send("0")
+        result.affectedRows > 0 ? res.send("1") : res.send("0")
         res.send(result)
+        return
     })
 })
+
+// 移除商品
+
+router.get('/del/:cart_num',(req,res,next)=>{
+    let obj = req.params
+    let sql = 'DELETE FROM cart WHERE cart_num = ?'
+    pool.query(sql,[obj.cart_num],(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        result.affectedRows > 0 ? res.send("1") : res.send("0")
+    })
+})
+
 
 
 
