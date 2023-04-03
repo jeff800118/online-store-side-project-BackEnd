@@ -269,7 +269,6 @@ router.post('/updateCart',(req,res,next)=>{
             return;
         }
         result.affectedRows > 0 ? res.send("1") : res.send("0")
-        res.send(result)
         return
     })
 })
@@ -289,6 +288,20 @@ router.get('/del/:cart_num',(req,res,next)=>{
 })
 
 
+// 結帳
+router.post('/checkout',(req,res,next)=>{
+    let obj = JSON.parse(JSON.stringify(req.body))
+    console.log(obj)
+    let sql = 'UPDATE goods JOIN cart ON goods.goods_num = cart.cart_pid SET ? WHERE goods_num = ?'
+    pool.query(sql,[obj,obj.cart_num],(err,result)=>{
+        if(err){
+            next(err)
+            return;
+        }
+        result.affectedRows > 0 ? res.send("1") : res.send("0")
+        return
+    })
+})
 
 
 
