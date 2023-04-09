@@ -275,10 +275,10 @@ router.post('/updateCart',(req,res,next)=>{
 
 // 移除商品
 
-router.get('/del/:cart_num',(req,res,next)=>{
+router.get('/del/:cart_pid',(req,res,next)=>{
     let obj = req.params
-    let sql = 'DELETE FROM cart WHERE cart_num = ?'
-    pool.query(sql,[obj.cart_num],(err,result)=>{
+    let sql = 'DELETE FROM cart WHERE cart_pid = ?'
+    pool.query(sql,[obj.cart_pid],(err,result)=>{
         if(err){
             next(err)
             return;
@@ -292,8 +292,8 @@ router.get('/del/:cart_num',(req,res,next)=>{
 router.post('/checkout',(req,res,next)=>{
     let obj = JSON.parse(JSON.stringify(req.body))
     console.log(obj)
-    let sql = 'UPDATE goods JOIN cart ON goods.goods_num = cart.cart_pid SET ? WHERE goods_num = ?'
-    pool.query(sql,[obj,obj.cart_num],(err,result)=>{
+    let sql = 'UPDATE goods SET ? WHERE goods_num = ?'
+    pool.query(sql,[obj,obj.goods_num],(err,result)=>{
         if(err){
             next(err)
             return;
